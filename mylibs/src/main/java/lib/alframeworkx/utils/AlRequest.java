@@ -181,15 +181,20 @@ public class AlRequest {
             @Override
             public void onErrorResponse(VolleyError error) {
                 AlStatic.showGoTroError(context, error);
-                String errorCode = "1012";
+                //                String errorCode = "1012";
+                String errorCode = "Error is detected";
                 if (error instanceof NetworkError) {
-                    errorCode = "1012";
+//                    errorCode = "1012";
+                    errorCode = "Looks like your Network is error";
                 } else if (error instanceof ServerError) {
-                    errorCode = "503";
+//                    errorCode = "503";
+                    errorCode = "Looks like your Server is error";
                 } else if (error instanceof NoConnectionError) {
-                    errorCode = "1019";
+//                    errorCode = "1019";
+                    errorCode = "There is no connection";
                 } else if (error instanceof TimeoutError) {
-                    errorCode = "522";
+//                    errorCode = "522";
+                    errorCode = "Timeout occured";
                 }
                 onPostRequest.onFailure(errorCode);
             }
@@ -228,15 +233,20 @@ public class AlRequest {
             @Override
             public void onErrorResponse(VolleyError error) {
                 AlStatic.showGoTroError(context, error);
-                String errorCode = "1012";
+                //                String errorCode = "1012";
+                String errorCode = "Error is detected";
                 if (error instanceof NetworkError) {
-                    errorCode = "1012";
+//                    errorCode = "1012";
+                    errorCode = "Looks like your Network is error";
                 } else if (error instanceof ServerError) {
-                    errorCode = "503";
+//                    errorCode = "503";
+                    errorCode = "Looks like your Server is error";
                 } else if (error instanceof NoConnectionError) {
-                    errorCode = "1019";
+//                    errorCode = "1019";
+                    errorCode = "There is no connection";
                 } else if (error instanceof TimeoutError) {
-                    errorCode = "522";
+//                    errorCode = "522";
+                    errorCode = "Timeout occured";
                 }
                 onPostRequest.onFailure(errorCode);
             }
@@ -282,15 +292,20 @@ public class AlRequest {
             @Override
             public void onErrorResponse(VolleyError error) {
                 AlStatic.showGoTroError(context, error);
-                String errorCode = "1012";
+                //                String errorCode = "1012";
+                String errorCode = "Error is detected";
                 if (error instanceof NetworkError) {
-                    errorCode = "1012";
+//                    errorCode = "1012";
+                    errorCode = "Looks like your Network is error";
                 } else if (error instanceof ServerError) {
-                    errorCode = "503";
+//                    errorCode = "503";
+                    errorCode = "Looks like your Server is error";
                 } else if (error instanceof NoConnectionError) {
-                    errorCode = "1019";
+//                    errorCode = "1019";
+                    errorCode = "There is no connection";
                 } else if (error instanceof TimeoutError) {
-                    errorCode = "522";
+//                    errorCode = "522";
+                    errorCode = "Timeout occured";
                 }
                 onPostRequest.onFailure(errorCode);
             }
@@ -336,15 +351,20 @@ public class AlRequest {
                 AlStatic.showGoTroError(context, error);
                 NetworkResponse networkResponse = error.networkResponse;
                 Log.d("gmsResponseFailure ", "onResponse: "+URL);
-                String errorCode = "1012";
+                //                String errorCode = "1012";
+                String errorCode = "Error is detected";
                 if (error instanceof NetworkError) {
-                    errorCode = "1012";
+//                    errorCode = "1012";
+                    errorCode = "Looks like your Network is error";
                 } else if (error instanceof ServerError) {
-                    errorCode = "503";
+//                    errorCode = "503";
+                    errorCode = "Looks like your Server is error";
                 } else if (error instanceof NoConnectionError) {
-                    errorCode = "1019";
+//                    errorCode = "1019";
+                    errorCode = "There is no connection";
                 } else if (error instanceof TimeoutError) {
-                    errorCode = "522";
+//                    errorCode = "522";
+                    errorCode = "Timeout occured";
                 }
                 onPostRequest.onFailure(errorCode);
             }

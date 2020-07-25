@@ -133,9 +133,9 @@ public class AlRequest {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                AlStatic.showGoTroError(context, error);
+//                AlStatic.showGoTroError(context, error);
 //                String errorCode = "1012";
-                String errorCode = "Error is detected";
+                String errorCode = "Looks like your Server is error";
                 if (error instanceof NetworkError) {
 //                    errorCode = "1012";
                     errorCode = "Looks like your Network is error";
@@ -180,9 +180,9 @@ public class AlRequest {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                AlStatic.showGoTroError(context, error);
+//                AlStatic.showGoTroError(context, error);
                 //                String errorCode = "1012";
-                String errorCode = "Error is detected";
+                String errorCode = "Looks like your Server is error";
                 if (error instanceof NetworkError) {
 //                    errorCode = "1012";
                     errorCode = "Looks like your Network is error";
@@ -232,9 +232,9 @@ public class AlRequest {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                AlStatic.showGoTroError(context, error);
+//                AlStatic.showGoTroError(context, error);
                 //                String errorCode = "1012";
-                String errorCode = "Error is detected";
+                String errorCode = "Looks like your Server is error";
                 if (error instanceof NetworkError) {
 //                    errorCode = "1012";
                     errorCode = "Looks like your Network is error";
@@ -291,9 +291,9 @@ public class AlRequest {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                AlStatic.showGoTroError(context, error);
+//                AlStatic.showGoTroError(context, error);
                 //                String errorCode = "1012";
-                String errorCode = "Error is detected";
+                String errorCode = "Looks like your Server is error";
                 if (error instanceof NetworkError) {
 //                    errorCode = "1012";
                     errorCode = "Looks like your Network is error";
@@ -348,11 +348,11 @@ public class AlRequest {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                AlStatic.showGoTroError(context, error);
+//                AlStatic.showGoTroError(context, error);
                 NetworkResponse networkResponse = error.networkResponse;
                 Log.d("gmsResponseFailure ", "onResponse: "+URL);
                 //                String errorCode = "1012";
-                String errorCode = "Error is detected";
+                String errorCode = "Looks like your Server is error";
                 if (error instanceof NetworkError) {
 //                    errorCode = "1012";
                     errorCode = "Looks like your Network is error";

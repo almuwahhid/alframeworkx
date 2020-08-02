@@ -14,7 +14,7 @@ import com.android.volley.toolbox.Volley;
 
 public class RequestHandler extends MultiDexApplication {
 //    private static final int TIMEOUT_MS = 25000; // 45second
-    private static final int TIMEOUT_MS = 60000; // 45second
+    protected int TIMEOUT_MS = 60000; // 45second
 
     private RequestQueue requestQueue;
     private static RequestHandler instance;

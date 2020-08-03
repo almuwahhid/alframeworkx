@@ -122,11 +122,12 @@ public class AlRequest {
         onPostRequest.onPreExecuted();
     }
 
-    public static void GET(String URL, final Context context, final OnGetRequest onGetRequest){
+    public static void GET(final String URL, final Context context, final OnGetRequest onGetRequest){
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,
                 URL, "", new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+                Log.d("restfullResponse GET", URL+" onResponse: "+response);
                 onGetRequest.onSuccess(response);
             }
 
@@ -155,7 +156,9 @@ public class AlRequest {
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                return onGetRequest.requestHeaders();
+                Map<String, String> getHeaders = onGetRequest.requestHeaders();
+                Log.d("restfullHeader GET", URL+" onHeader: "+getHeaders);
+                return getHeaders;
             }
 
         };
@@ -170,7 +173,7 @@ public class AlRequest {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            Log.d("gmsResponse "+URL, "onResponse: "+response);
+                            Log.d("restfullResponse POST", URL+" onResponse: "+response);
                             JSONObject jsonObject = new JSONObject(response);
                             onPostRequest.onSuccess(jsonObject);
                         } catch (JSONException e) {
@@ -203,13 +206,15 @@ public class AlRequest {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> param;
                 param = onPostRequest.requestParam();
-                Log.d("gmsParams "+URL, "requestParam: "+param);
+                Log.d("restfullParams POST", URL+" requestParam: "+param);
                 return param;
             }
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                return onPostRequest.requestHeaders();
+                Map<String, String> getHeaders = onPostRequest.requestHeaders();
+                Log.d("restfullHeader GET", URL+" onHeader: "+getHeaders);
+                return getHeaders;
             }
         };
         RequestHandler.getInstance().addToRequestQueue(request, AlStatic.DateInMilis()+URL);
@@ -222,7 +227,7 @@ public class AlRequest {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            Log.d("gmsResponse "+URL, "onResponse: "+response);
+                            Log.d("alResponse "+URL, "onResponse: "+response);
                             JSONObject jsonObject = new JSONObject(response);
                             onPostRequest.onSuccess(jsonObject);
                         } catch (JSONException e) {
@@ -262,7 +267,7 @@ public class AlRequest {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> param;
                 param = onPostRequest.requestParam();
-                Log.d("gmsParams "+URL, "requestParam: "+param);
+                Log.d("alParams "+URL, "requestParam: "+param);
                 return param;
             }
 
@@ -339,6 +344,7 @@ public class AlRequest {
             public void onResponse(NetworkResponse response) {
                 String resultResponse = new String(response.data);
                 try {
+                    Log.d("restfullResponse POSTM", URL+" onResponse: "+resultResponse);
                     JSONObject result = new JSONObject(resultResponse);
                     onPostRequest.onSuccess(result);
                 } catch (JSONException e) {
@@ -371,12 +377,16 @@ public class AlRequest {
         }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                return onPostRequest.requestHeaders();
+                Map<String, String> getHeaders = onPostRequest.requestHeaders();
+                Log.d("restfullHeader POSTM", URL+" onHeader: "+getHeaders);
+                return getHeaders;
             }
 
             @Override
             protected Map<String, String> getParams() {
-                return onPostRequest.requestParam();
+                Map<String, String> getHeaders = onPostRequest.requestParam();
+                Log.d("restfullParam POSTM", URL+" onParam: "+getHeaders);
+                return getHeaders;
             }
 
             @Override

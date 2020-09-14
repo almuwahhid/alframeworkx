@@ -17,6 +17,9 @@ import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +35,8 @@ import lib.alframeworkx.SuperUser.RequestHandler;
 
 public class AlRequest {
 
+    private static final ObjectMapper mapper = new ObjectMapper();
+
     public interface OnPostRequest{
         void onPreExecuted();
 
@@ -39,9 +44,11 @@ public class AlRequest {
 
         void onFailure(String error);
 
-        Map<String, String> requestParam();
+        //        Map<String, String> requestParam();
+        Object requestParam();
 
-        Map<String, String> requestHeaders();
+        //        Map<String, String> requestHeaders();
+        Object requestHeaders();
     }
 
     public interface OnPostRawRequest{
@@ -75,9 +82,11 @@ public class AlRequest {
 
         void onFailure(String error);
 
-        Map<String, String> requestParam();
+        //        Map<String, String> requestParam();
+        Object requestParam();
 
-        Map<String, String> requestHeaders();
+        //        Map<String, String> requestHeaders();
+        Object requestHeaders();
     }
     public interface OnMultipartRequest{
         Map<String, VolleyMultipartRequest.DataPart> requestData();
@@ -88,9 +97,11 @@ public class AlRequest {
 
         void onFailure(String error);
 
-        Map<String, String> requestHeaders();
+        //        Map<String, String> requestHeaders();
+        Object requestHeaders();
 
-        Map<String, String> requestParam();
+        //        Map<String, String> requestParam();
+        Object requestParam();
 
     }
 
@@ -122,33 +133,27 @@ public class AlRequest {
         onPostRequest.onPreExecuted();
     }
 
-    public static void GET(final String URL, final Context context, final OnGetRequest onGetRequest){
+    public static void GET(String URL, final Context context, final OnGetRequest onGetRequest){
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,
                 URL, "", new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Log.d("restfullResponse GET", URL+" onResponse: "+response);
                 onGetRequest.onSuccess(response);
             }
 
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-//                AlStatic.showGoTroError(context, error);
-//                String errorCode = "1012";
-                String errorCode = "Looks like your Server is error";
+                AlStatic.showGoTroError(context, error);
+                String errorCode = "1012";
                 if (error instanceof NetworkError) {
-//                    errorCode = "1012";
-                    errorCode = "Looks like your Network is error";
+                    errorCode = "1012";
                 } else if (error instanceof ServerError) {
-//                    errorCode = "503";
-                    errorCode = "Looks like your Server is error";
+                    errorCode = "503";
                 } else if (error instanceof NoConnectionError) {
-//                    errorCode = "1019";
-                    errorCode = "There is no connection";
+                    errorCode = "1019";
                 } else if (error instanceof TimeoutError) {
-//                    errorCode = "522";
-                    errorCode = "Timeout occured";
+                    errorCode = "522";
                 }
                 onGetRequest.onFailure(errorCode);
             }
@@ -156,9 +161,7 @@ public class AlRequest {
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> getHeaders = onGetRequest.requestHeaders();
-                Log.d("restfullHeader GET", URL+" onHeader: "+getHeaders);
-                return getHeaders;
+                return toMap(onGetRequest.requestHeaders());
             }
 
         };
@@ -173,7 +176,7 @@ public class AlRequest {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            Log.d("restfullResponse POST", URL+" onResponse: "+response);
+                            Log.d("gmsResponse "+URL, "onResponse: "+response);
                             JSONObject jsonObject = new JSONObject(response);
                             onPostRequest.onSuccess(jsonObject);
                         } catch (JSONException e) {
@@ -183,21 +186,16 @@ public class AlRequest {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-//                AlStatic.showGoTroError(context, error);
-                //                String errorCode = "1012";
-                String errorCode = "Looks like your Server is error";
+                AlStatic.showGoTroError(context, error);
+                String errorCode = "1012";
                 if (error instanceof NetworkError) {
-//                    errorCode = "1012";
-                    errorCode = "Looks like your Network is error";
+                    errorCode = "1012";
                 } else if (error instanceof ServerError) {
-//                    errorCode = "503";
-                    errorCode = "Looks like your Server is error";
+                    errorCode = "503";
                 } else if (error instanceof NoConnectionError) {
-//                    errorCode = "1019";
-                    errorCode = "There is no connection";
+                    errorCode = "1019";
                 } else if (error instanceof TimeoutError) {
-//                    errorCode = "522";
-                    errorCode = "Timeout occured";
+                    errorCode = "522";
                 }
                 onPostRequest.onFailure(errorCode);
             }
@@ -205,16 +203,14 @@ public class AlRequest {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> param;
-                param = onPostRequest.requestParam();
-                Log.d("restfullParams POST", URL+" requestParam: "+param);
+                param = toMap(onPostRequest.requestParam());
+                Log.d("gmsParams "+URL, "requestParam: "+param);
                 return param;
             }
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> getHeaders = onPostRequest.requestHeaders();
-                Log.d("restfullHeader GET", URL+" onHeader: "+getHeaders);
-                return getHeaders;
+                return toMap(onPostRequest.requestHeaders());
             }
         };
         RequestHandler.getInstance().addToRequestQueue(request, AlStatic.DateInMilis()+URL);
@@ -227,7 +223,7 @@ public class AlRequest {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            Log.d("alResponse "+URL, "onResponse: "+response);
+                            Log.d("gmsResponse "+URL, "onResponse: "+response);
                             JSONObject jsonObject = new JSONObject(response);
                             onPostRequest.onSuccess(jsonObject);
                         } catch (JSONException e) {
@@ -237,21 +233,16 @@ public class AlRequest {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-//                AlStatic.showGoTroError(context, error);
-                //                String errorCode = "1012";
-                String errorCode = "Looks like your Server is error";
+                AlStatic.showGoTroError(context, error);
+                String errorCode = "1012";
                 if (error instanceof NetworkError) {
-//                    errorCode = "1012";
-                    errorCode = "Looks like your Network is error";
+                    errorCode = "1012";
                 } else if (error instanceof ServerError) {
-//                    errorCode = "503";
-                    errorCode = "Looks like your Server is error";
+                    errorCode = "503";
                 } else if (error instanceof NoConnectionError) {
-//                    errorCode = "1019";
-                    errorCode = "There is no connection";
+                    errorCode = "1019";
                 } else if (error instanceof TimeoutError) {
-//                    errorCode = "522";
-                    errorCode = "Timeout occured";
+                    errorCode = "522";
                 }
                 onPostRequest.onFailure(errorCode);
             }
@@ -266,14 +257,14 @@ public class AlRequest {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> param;
-                param = onPostRequest.requestParam();
-                Log.d("alParams "+URL, "requestParam: "+param);
+                param = toMap(onPostRequest.requestParam());
+                Log.d("gmsParams "+URL, "requestParam: "+param);
                 return param;
             }
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                return onPostRequest.requestHeaders();
+                return toMap(onPostRequest.requestHeaders());
             }
         };
         RequestHandler.getInstance().addToRequestQueue(request, AlStatic.DateInMilis()+URL);
@@ -296,21 +287,16 @@ public class AlRequest {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-//                AlStatic.showGoTroError(context, error);
-                //                String errorCode = "1012";
-                String errorCode = "Looks like your Server is error";
+                AlStatic.showGoTroError(context, error);
+                String errorCode = "1012";
                 if (error instanceof NetworkError) {
-//                    errorCode = "1012";
-                    errorCode = "Looks like your Network is error";
+                    errorCode = "1012";
                 } else if (error instanceof ServerError) {
-//                    errorCode = "503";
-                    errorCode = "Looks like your Server is error";
+                    errorCode = "503";
                 } else if (error instanceof NoConnectionError) {
-//                    errorCode = "1019";
-                    errorCode = "There is no connection";
+                    errorCode = "1019";
                 } else if (error instanceof TimeoutError) {
-//                    errorCode = "522";
-                    errorCode = "Timeout occured";
+                    errorCode = "522";
                 }
                 onPostRequest.onFailure(errorCode);
             }
@@ -344,7 +330,6 @@ public class AlRequest {
             public void onResponse(NetworkResponse response) {
                 String resultResponse = new String(response.data);
                 try {
-                    Log.d("restfullResponse POSTM", URL+" onResponse: "+resultResponse);
                     JSONObject result = new JSONObject(resultResponse);
                     onPostRequest.onSuccess(result);
                 } catch (JSONException e) {
@@ -354,39 +339,30 @@ public class AlRequest {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-//                AlStatic.showGoTroError(context, error);
+                AlStatic.showGoTroError(context, error);
                 NetworkResponse networkResponse = error.networkResponse;
                 Log.d("gmsResponseFailure ", "onResponse: "+URL);
-                //                String errorCode = "1012";
-                String errorCode = "Looks like your Server is error";
+                String errorCode = "1012";
                 if (error instanceof NetworkError) {
-//                    errorCode = "1012";
-                    errorCode = "Looks like your Network is error";
+                    errorCode = "1012";
                 } else if (error instanceof ServerError) {
-//                    errorCode = "503";
-                    errorCode = "Looks like your Server is error";
+                    errorCode = "503";
                 } else if (error instanceof NoConnectionError) {
-//                    errorCode = "1019";
-                    errorCode = "There is no connection";
+                    errorCode = "1019";
                 } else if (error instanceof TimeoutError) {
-//                    errorCode = "522";
-                    errorCode = "Timeout occured";
+                    errorCode = "522";
                 }
                 onPostRequest.onFailure(errorCode);
             }
         }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> getHeaders = onPostRequest.requestHeaders();
-                Log.d("restfullHeader POSTM", URL+" onHeader: "+getHeaders);
-                return getHeaders;
+                return toMap(onPostRequest.requestHeaders());
             }
 
             @Override
             protected Map<String, String> getParams() {
-                Map<String, String> getHeaders = onPostRequest.requestParam();
-                Log.d("restfullParam POSTM", URL+" onParam: "+getHeaders);
-                return getHeaders;
+                return toMap(onPostRequest.requestParam());
             }
 
             @Override
@@ -398,5 +374,25 @@ public class AlRequest {
         multipartRequest.setShouldCache(false);
         RequestHandler.getInstance().addToRequestQueue(multipartRequest, AlStatic.DateInMilis()+URL);
         onPostRequest.onPreExecuted();
+    }
+
+
+    public static Map<String, String> toMap(Object obj) {
+        // Convert the object to an intermediate form (map of strings to JSON nodes)
+        Map<String, JsonNode> intermediateMap = mapper.convertValue(obj, new TypeReference<Map<String, JsonNode>>() {});
+
+        // Convert the json nodes to strings
+        Map<String, String> finalMap = new HashMap<>(intermediateMap.size() + 1); // Start out big enough to prevent resizing
+        for (Map.Entry<String, JsonNode> e : intermediateMap.entrySet()) {
+            String key = e.getKey();
+            JsonNode val = e.getValue();
+
+            // Get the text value of textual nodes, and convert non-textual nodes to JSON strings
+            String stringVal = val.isTextual() ? val.textValue() : val.toString();
+
+            finalMap.put(key, stringVal);
+        }
+
+        return finalMap;
     }
 }
